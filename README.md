@@ -6,6 +6,7 @@
 - [Space Invaders](#space-invaders)
 - [Bookshelf](#bookshelf)
 
+---
 
 ## To-Do List
 A To-do list web app with user authentication, multiple lists, and a calendar view.
@@ -41,7 +42,13 @@ Users can edit a list to add more items, change dates, and delete items.
 ![alt text](./images/to-do-list/edit.png)
 
 ### Settings
-Comes with a settings page which allows users to toggle optional lists in list view, change the default calendar view, choose whether the week starts on Monday or Sunday, and apply a theme color to the whole application. This is also where users can go to logout or delete their account.
+Comes with a settings page with the following features:
+- toggle optional lists in list view
+- change the default calendar view
+- choose whether the week starts on Monday or Sunday
+- apply a theme color to the whole application
+- logout
+- delete account
 
 ![alt text](./images/to-do-list/settings.png)
 
