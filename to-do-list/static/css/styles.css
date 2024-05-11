@@ -1,0 +1,45 @@
+.list-input {
+    border: none;
+    outline: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+    width: 55%;
+}
+
+.date-input {
+    border: none;
+    outline: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+    max-width: 30%;
+    float: right;
+    text-align: end;
+}
+
+.icon-button {
+    border: none;
+    background: none;
+    font-size: 1.2em;
+}
+
+.to-do-list {
+    scroll-margin-top: 220px;
+}
+
+@media (max-width: 576px) {
+    .calendar-header {
+        top: 70px;
+    }
+
+    .body-content {
+        position: relative;
+        z-index: 0
+    }
+
+    .side-bar {
+        position: sticky;
+        z-index: 1000
+    }
+}

@@ -1,0 +1,26 @@
+<div class="row">
+  {% for list in lists %}
+    {% with styles = 
+      'col-xl-4 col-lg-6 col-12' if view == 'week'
+      else 'col-12' if view == 'month'
+      else 'col-12' if view == 'year' 
+      else 'col-12 col-xl-4 col-lg-' + ('12' if list.is_today else '6') %}
+      <div class="{{ styles }}">
+        {% with list = lists[list] %}
+          {% include 'components/list.html' %}
+        {% endwith %}
+      </div>
+    {% endwith %}
+  {% endfor %}
+</div>
+<script>
+  function scrollToToday() {
+    const scrollElem = "{{ today_date.strftime('%B') if view == 'year' else 'Today' }}"
+    document.getElementById(scrollElem).scrollIntoView()
+  }
+</script>
+{% if request.args.get('scroll') %}
+  <script>
+    scrollToToday()
+  </script>
+{% endif %}

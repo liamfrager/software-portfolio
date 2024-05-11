@@ -1,0 +1,32 @@
+<div id="{{ list.title }}" class="container my-4 to-do-list">
+  <form method="post">
+    <div class="d-flex justify-content-between">
+      <h2 class="{{ 'text-primary' if list.is_today }}">{{ list.title }}</h2>
+      {% if editing == list.title %}
+        <input type="submit" formaction="{{ url_for('edit', route=list.route, view=view, offset=request.args.get('offset'), editing=list.title) }}" style="position: absolute; left: -1000%"/>
+        <button class="bi bi-check-lg text-primary icon-button" type="submit" formaction="{{ url_for('edit', route=list.route, view=view, offset=request.args.get('offset'), checked=True) }}"></button>
+      {% elif not editing %}
+        <a class="bi bi-pencil text-primary" href="{{ url_for(list.route, view=view, editing=list.title, offset=request.args.get('offset')) }}"></a>
+      {% endif %}
+    </div>
+    <ul class="list-group list-group-flush">
+      {% with items = list['items'] %}
+        {% for item in items %}
+          {% with show_date = loop.previtem.due_date != item.due_date if loop.previtem else True %}
+            {% include 'components/list_item.html' %}
+          {% endwith %}
+        {% endfor %}
+      {% endwith %}
+      {% if editing == list.title %}
+        <li class="list-group-item">
+            <input id="newItem" class="form-control" type="text" name="new_item" placeholder="New item" autofocus>
+            <input type="text" style="display: none" name="new_item_due_date" value="{{ list.new_item_due_date }}">
+            <input type="text" style="display: none" name="list_title" value="{{ list.title }}">
+        </li>
+      {% endif %}
+    </ul>
+  </form>
+</div>
+<script defer>
+  document.getElementById('newItem').focus()
+</script>

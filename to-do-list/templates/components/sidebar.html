@@ -1,0 +1,33 @@
+<div class="col-sm-auto bg-light sticky-top side-bar">
+  <div class="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top">
+    <ul class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center align-items-center">
+      <!-- <li class="nav-item">
+        <a href="{{ url_for('home') }}" class="nav-link py-3 px-2" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+          <i class="bi-house fs-1"></i>
+        </a>
+      </li> -->
+      <li>
+        <a href="{{ url_for('lists') }}" class="nav-link py-3 px-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Lists">
+          <i class="bi-list-check fs-1"></i>
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('calendar', view=current_user.settings.default_calendar_view if current_user.is_authenticated else 'week', scroll=True) }}" class="nav-link py-3 px-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Calendar">
+          <i class="bi-calendar3 fs-1"></i>
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('settings') }}" class="nav-link py-3 px-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Settings">
+          <i class="bi-gear fs-1"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<script>
+  function loadTooltips() {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+  }
+  loadTooltips()
+</script>
