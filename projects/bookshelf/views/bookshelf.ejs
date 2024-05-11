@@ -1,0 +1,140 @@
+<%- include("partials/header.ejs") %>
+<% if (locals.book) { %>
+  <div class="book-display">
+    <div class="title">
+      <h1><%= book.title %></h1>
+      <p><%= book.author %></p>
+    </div>
+    <div class="h-wrap">
+      <div class="content-left v-wrap">
+        <img src="<%= book.cover %>" alt="">
+        <div class="stars h-wrap h-center">
+          <% for (let i = 0; i < book.rating; i++) { %>
+            <span class="filled logo-icon material-icons">star</span>
+          <% }; %>
+          <% for (let i = 0; i < 5 - book.rating; i++) { %>
+            <span class="logo-icon material-icons">star_border</span>
+          <% }; %>
+        </div>
+      </div>
+      <div class="book-notes">
+        <hr>
+        <form id="edit-notes-form" action="/notes" method="post">
+          <input type="hidden" name="isbn" value=<%= book.isbn %>>
+          <div class="h-wrap">
+            <span class="notes-title">Notes:</span>
+            <input class="rating-input v-center edit invisible" type="number" name="rating" id="rating" min="0" max="5" value="<%= book.rating %>">
+            <span class="edit material-symbols-outlined"><%= book.rating %></span>
+            <span class="material-symbols-outlined">/5</span>
+            <span class="filled material-icons">star</span>
+            <span onclick="toggleInvisible('edit')" class="hover-fade edit edit-icon material-symbols-outlined">edit</span>
+            <span onclick="toggleInvisible('edit');document.getElementById('edit-notes-form').submit()" class="hover-fade edit edit-icon material-symbols-outlined invisible">done</span>
+          </div>
+          <p class="edit notes-content"><%= book.notes %></p>
+          <textarea class="edit invisible" name="notes" rows="20"><%= book.notes %></textarea>
+        </form>
+      </div>
+    </div>
+  </div>
+  <button class="button edit warning invisible delete-button v-wrap hover-fade" onclick="toggleInvisible('pop-up')">Take this book off the shelf</button>
+
+  <div class="modal h-wrap pop-up invisible">
+    <div class="v-wrap v-center h-center dialogue pop-up invisible">
+      <h3>Would you like to remove this book from your bookshelf?</h3>
+      <form class="h-wrap h-center" action="/delete" method="post">
+        <input type="hidden" name="isbn" value=<%= book.isbn %>>
+        <button class="button hover-fade warning" type="button" onclick="this.form.submit()">Remove</button>
+        <button class="button hover-fade" type="button" onclick="toggleInvisible('pop-up')">Keep Book</button>
+      </form>
+    </div>
+  </div>
+<% } else {; %>
+  <h1>404: Book not in your library.</h1>
+<% }; %>
+<%- include("partials/footer.ejs") %>
+
+<style>
+  h1 {
+    margin: .5em;
+  }
+  p {
+    margin: 0 0 .5em 0;
+  }
+  .book-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1.5em auto 0 auto;
+    background-color: rgb(66, 33, 18);
+    color: cornsilk;
+    text-decoration: none;
+    text-align: center;
+    padding: 0 1.5em 1.5em 1.5em;
+    border-radius: .8em;
+    user-select: none;
+    width: 80%;
+  }
+  .content-left {
+    width: 30%;
+    height: 100%;
+  }
+  .stars {
+    margin-top: 1em;
+  }
+
+  .book-notes {
+    margin-left: 1.5em;
+    width: 70%;
+    text-align: left;
+  }
+  .notes-content {
+    white-space: pre-wrap;
+  }
+  textarea {
+    width: 100%;
+    resize: none;
+    font-family: serif;
+    font-size: 1em;
+  }
+  .notes-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-right: auto;
+    margin-bottom: .8em;
+  }
+  .rating-input {
+    height: 100%;
+    margin: .4em .2em 0 0;
+  }
+  .rating {
+    margin-right: 1em;
+  }
+  .edit-icon:hover {
+    cursor: pointer;
+  }
+  #edit-notes-form {
+    height: 100%;
+  }
+  .delete-button {
+    position: relative;
+    margin: 1em auto;
+  }
+  .warning {
+    background-color: darkred;
+  }
+  .modal {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 1;
+  }
+  .dialogue {
+    background-color: cornsilk;
+    margin: auto;
+    height: 20%;
+    border: 1em solid rgb(66, 33, 18);
+    border-radius: .5em 1em;
+    padding: 1em;
+    text-align: center;
+  }
+</style>

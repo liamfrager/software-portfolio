@@ -1,0 +1,31 @@
+<%- include("partials/header.ejs") %>
+
+<div class="v-wrap v-center">
+	<h1><%= locals.heading %></h1>
+	<form class="v-wrap v-center" action="/search-book" method="post">
+		<div class="h-wrap h-center">
+			<input type="text" name="isbn" value="<%= locals.isbn ? isbn : '' %>" placeholder="ISBN" autofocus autocomplete="off" onfocus="this.setSelectionRange(this.value.length,this.value.length);"/>
+			<input type="submit" value="Search">
+		</div>
+		<% if (locals.heading === "Book found!") { %>
+			<div class="book">
+				<h3><%= locals.title %></h3>
+				<img src="<%= locals.cover %>" alt="" />
+				<p><%= locals.author %></p>
+			</div>
+			<button class="hover-fade" formaction="/add-book">
+				<%= locals.bookAlreadyOnShelf === true ? "This book is already on your shelf" : "Add book to collection" %>
+			</button>
+		<% }; %>
+	</form>
+</div>
+
+<%-include("partials/footer.ejs") %>
+
+<!-- 1338878921 -->
+
+<style>
+	form input {
+		margin: auto .5em;
+	}
+</style>

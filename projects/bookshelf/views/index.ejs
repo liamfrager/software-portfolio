@@ -1,0 +1,60 @@
+<%- include("partials/header.ejs") %>
+<span class="filter hover-zoom hover-fade material-symbols-outlined" onclick="toggleInvisible('filter-pop-up')">sort</span>
+<div class="filter-pop-up invisible">
+  <form class="v-wrap" action="/" method="post">
+    <button class="hover-color" name="order" value="title ASC">Title</button>
+    <button class="hover-color" name="order" value="author ASC">Author</button>
+    <button class="hover-color" name="order" value="rating DESC">Rating</button>
+    <button class="hover-color" name="order" value="date_added DESC">Added</button>
+    <button class="hover-color" name="order" value="ISBN ASC">ISBN</button>
+  </form>
+</div>
+<div class="bookshelf">
+  <% if (locals.books) { %>
+  <% books.forEach(book => { %>
+    <a class="book hover-zoom" href=<%= "/bookshelf?isbn=" + book.isbn %>>
+      <p><%= book.title %></p>
+      <img src="<%= book.cover %>" alt="" draggable="false">
+      <p><%= book.author %></p>
+      <div class="stars h-wrap h-center">
+        <% for (let i = 0; i < book.rating; i++) { %>
+          <span class="filled logo-icon material-icons">star</span>
+        <% }; %>
+        <% for (let i = 0; i < 5 - book.rating; i++) { %>
+          <span class="logo-icon material-icons">star_border</span>
+        <% }; %>
+      </div>
+    </a>
+  <% }); %>
+<% }; %>
+</div>
+<%- include("partials/footer.ejs") %>
+
+<style>
+  .bookshelf {
+    display: grid;
+    /* grid-auto-rows: minmax(); */
+    grid-template-columns: repeat(auto-fill, minmax(25ch, 1fr));
+  }
+  .stars {
+    margin: -1em 0 1.5em 0;
+    font-size: .5em;
+  }
+  .filter:hover {
+    cursor: pointer;
+  }
+  .filter-pop-up {
+    position: absolute;
+    background: burlywood;
+    border: 2px solid rgb(66, 33, 18);
+    border-radius: 0 .5em .5em .5em;
+    padding: .5em;
+    z-index: 1;
+  }
+  .filter-pop-up form button {
+    margin: .2em;
+    background-color: transparent;
+    border: none;
+    color: rgb(66, 33, 18);
+  }
+</style>

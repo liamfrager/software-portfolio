@@ -1,0 +1,52 @@
+<%- include("boilerplate.ejs") %>
+
+<header class="header">
+  <a class="logo" href="/">
+    <span class="logo-icon material-symbols-outlined">dictionary</span>MY BOOKSHELF
+  </a>
+  <a class="hover-color add-book" href="/new-book">
+    <span class="material-symbols-outlined">bookmark</span>Add book
+  </a>
+</header>
+<div class="filler"></div>
+
+<style>
+.header {
+    background-color: burlywood;
+  position: fixed;
+  inset: auto 0;
+  padding: 1em;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: rgb(66, 33, 18);
+  top: 0;
+  border-bottom: 3px solid rgb(66, 33, 18);
+}
+
+.logo {
+  font-size: 2.5em;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgb(66, 33, 18);
+}
+.logo-icon {
+  font-size: 1.5em;
+  margin-right: .2em;
+}
+
+.add-book {
+  font-size: 1.3em;
+  text-decoration: none;
+  color: rgb(66, 33, 18);
+  display: flex;
+  align-items: center;
+}
+.filler {
+  height: 1.5em;
+}
+</style>
