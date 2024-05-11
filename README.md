@@ -8,15 +8,47 @@
 
 
 ## To-Do List
+A To-do list web app with user authentication, multiple lists, and a calendar view.
+
+### Login page
+Implements secure user authentication with password hashing.
+
 ![alt text](./images/to-do-list/login.png)
+
+### List view
+Show lists for "Today", "This Week", and "This Month". Also features optional "Overdue" and "Future" lists.
+
 ![alt text](./images/to-do-list/lists.png)
+
+### Calendar view
+Scroll forward and backward in a calendar of your to-do items. Viewing options include...
+
+By week:
+
 ![alt text](./images/to-do-list/week.png)
+
+By month:
+
 ![alt text](./images/to-do-list/month.png)
+
+By year:
+
 ![alt text](./images/to-do-list/year.png)
-### Mobile compatible
-![alt text](./images/to-do-list/mobile.png)
+
+### Edit
+Users can edit a list to add more items, change dates, and delete items.
+
 ![alt text](./images/to-do-list/edit.png)
+
+### Settings
+Comes with a settings page which allows users to toggle optional lists in list view, change the default calendar view, choose whether the week starts on Monday or Sunday, and apply a theme color to the whole application. This is also where users can go to logout or delete their account.
+
 ![alt text](./images/to-do-list/settings.png)
+
+### Mobile compatible
+The web app is responsive and can be used on both desktop and mobile.
+
+![alt text](./images/to-do-list/mobile.png)
 
 ---
 
