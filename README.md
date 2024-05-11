@@ -2,9 +2,9 @@
 
 ## Projects
 
-- [To-Do List](###to-do-list)
-- [Space Invaders](###space-invaders)
-- [Bookshelf](###bookshelf)
+- [To-Do List](#to-do-list)
+- [Space Invaders](#space-invaders)
+- [Bookshelf](#bookshelf)
 
 
 ### To-Do List
