@@ -28,12 +28,20 @@ class Node():
 
         # TODO: Rebalance tree after insertion.
 
-    def find(self):
-        return Node()
+    def find(self, value) -> bool:
+        '''Returns TRUE if value is in the tree'''
+        if self.value == value:
+            return True
+        elif value < self.value and self.left:
+            return self.left.find(value)
+        elif value >= self.value and self.right:
+            return self.right.find(value)
+        else:
+            return False
 
-    def delete(self, val) -> None:
+    def delete(self, value) -> None:
         '''Removes a node from the BST.'''
-        if self.value == val:
+        if self.value == value:
             if self.left == None:
                 self.value = self.right.value
                 self.left = self.right.left
@@ -53,10 +61,10 @@ class Node():
                 self.right = self.left.right
                 self.left = self.left.left
 
-        elif val >= self.value:
-            self.right.delete(val)
-        elif val < self.value:
-            self.left.delete(val)
+        elif value >= self.value and self.right:
+            self.right.delete(value)
+        elif value < self.value and self.left:
+            self.left.delete(value)
         else:
             raise Exception
 

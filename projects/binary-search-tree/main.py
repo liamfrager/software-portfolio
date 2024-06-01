@@ -7,3 +7,6 @@ for num in nums:
     tree.insert(num)
 
 print(tree.values)
+
+print(tree.find(7))
+print(tree.find(8))
