@@ -1,32 +1,41 @@
-class Node():
+class BSTNode():
     def __init__(self, value=None) -> None:
         # VALUE
         self.value = value
         # RELATIONSHIPS
-        self.left: Node = None
-        self.right: Node = None
-        # BRANCH WEIGHTS
-        self.l_weight = 0
-        self.r_weight = 0
+        self.left: BSTNode = None
+        self.right: BSTNode = None
+        # WEIGHTS
+        self.balance = 0
 
     def insert(self, val) -> None:
         '''Inserts a node into the BST.'''
         if not self.value:
             self.value = val
         elif val >= self.value:
+            self.balance += 1
             if self.right:
                 self.right.insert(val)
             else:
-                self.right = Node(val)
+                self.right = BSTNode(val)
         elif val < self.value:
+            self.balance -= 1
             if self.left:
                 self.left.insert(val)
             else:
-                self.left = Node(val)
+                self.left = BSTNode(val)
         else:
             raise Exception
 
         # TODO: Rebalance tree after insertion.
+        if self.balance > 1:
+            if val < self.right.value:
+                self.right._rotate_right()
+            self._rotate_left()
+        if self.balance < -1:
+            if val > self.left.value:
+                self.left._rotate_left()
+            self._rotate_right()
 
     def find(self, value) -> bool:
         '''Returns TRUE if value is in the tree'''
@@ -68,14 +77,34 @@ class Node():
         else:
             raise Exception
 
-        # TODO: Rebalance tree after deletion.
+        # TODO: rebalance after delete
+
+    def _rotate_right(self) -> None:
+        x = self
+        x.left = self.left.right
+        self = self.left
+        self.right = x
+        self.balance += 2  # TODO: recalculate weights after rotation.
+
+    def _rotate_left_right(self) -> None:
+        pass
+
+    def _rotate_left(self) -> None:
+        x = self
+        x.right = self.right.left
+        self = self.right
+        self.left = x
+        self.balance -= 2  # TODO: recalculate weights after rotation.
+
+    def _rotate_right_left(self) -> None:
+        pass
 
     @property
     def values(self) -> list[int]:
         '''Prints all values of the BST in order.'''
         vals = []
 
-        def iterate(node: Node):
+        def iterate(node: BSTNode):
             if node.left:
                 iterate(node.left)
             if node.value:
@@ -85,6 +114,22 @@ class Node():
 
         iterate(self)
         return vals
+
+    @property
+    def weights(self) -> list[int]:
+        '''Prints all values of the BST in order.'''
+        weights = []
+
+        def iterate(node: BSTNode):
+            if node.left:
+                iterate(node.left)
+        # if node.weight:
+            weights.append(node.balance)
+            if node.right:
+                iterate(node.right)
+
+        iterate(self)
+        return weights
 
     @property
     def min(self) -> int:
