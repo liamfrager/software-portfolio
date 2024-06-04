@@ -6,19 +6,27 @@ class BSTNode():
         self.left: BSTNode = None
         self.right: BSTNode = None
         # WEIGHTS
-        self.balance = 0
+        self.height = 0
+
+    @property
+    def balance(self):
+        r = 0 if self.right == None else self.right.height
+        l = 0 if self.left == None else self.left.height
+        return r - l
 
     def insert(self, val) -> None:
         '''Inserts a node into the BST.'''
         if not self.value:
             self.value = val
         elif val >= self.value:
+            # TODO: rework to adjust height rather than balance
             self.balance += 1
             if self.right:
                 self.right.insert(val)
             else:
                 self.right = BSTNode(val)
         elif val < self.value:
+            # TODO: rework to adjust height rather than balance
             self.balance -= 1
             if self.left:
                 self.left.insert(val)
