@@ -36,7 +36,7 @@ class BSTNode():
                 self.height = self.right.height + 1  # extend height
             else:
                 self.right = BSTNode(val)
-                if not self.left:  # extend height when inserting
+                if not self.left:  # extend height
                     self.height += 1
         elif val < self.value:
             if self.left:
@@ -44,14 +44,12 @@ class BSTNode():
                 self.height = self.right.height + 1  # extend height
             else:
                 self.left = BSTNode(val)
-                if not self.right:  # extend height when inserting
+                if not self.right:  # extend height
                     self.height += 1
         else:
             raise Exception
 
-        # TODO: rework to adjust height rather than balance
-
-        # TODO: Rebalance tree after insertion.
+        # rebalance tree after insertion.
         if self.balance > 1:
             if val < self.right.value:
                 self.right._rotate_right()
