@@ -1,3 +1,6 @@
+import copy
+
+
 class BSTNode():
     def __init__(self, value=None) -> None:
         # VALUE
@@ -49,7 +52,6 @@ class BSTNode():
         # TODO: rework to adjust height rather than balance
 
         # TODO: Rebalance tree after insertion.
-        print(self.balance)
         if self.balance > 1:
             if val < self.right.value:
                 self.right._rotate_right()
@@ -102,22 +104,19 @@ class BSTNode():
         # TODO: rebalance after delete
 
     def _rotate_right(self) -> None:
-        self.right = self
-        self.right.left = self.left.right
-        self.value = self.left.value
-        self.height = self.left.height
-        self.left = self.left.left
+        x = copy.deepcopy(self)
+        x.left = copy.deepcopy(self.left.right)
+        self = copy.deepcopy(self.left)
+        self.right = x
         # recalculate heights
         self.right.height = self.right.recalculate_height()
         self.height = self.recalculate_height()
 
     def _rotate_left(self) -> None:
-        # ROTATE FUNCTIONS ARE NOT CHANGING THE DATA CORRECTLY. THE ISSUE IS IN REFERENCING SELF?
-        self.left = self
-        self.left.right = self.right.left
-        self.value = self.right.value
-        self.height = self.right.height
-        self.right = self.right.right
+        x = copy.deepcopy(self)
+        x.right = copy.deepcopy(self.right.left)
+        self = copy.deepcopy(self.right)
+        self.left = x
         # recalculate heights
         self.left.height = self.left.recalculate_height()
         self.height = self.recalculate_height()
@@ -137,22 +136,6 @@ class BSTNode():
 
         iterate(self)
         return vals
-
-    @property
-    def weights(self) -> list[int]:
-        '''Prints all values of the BST in order.'''
-        weights = []
-
-        def iterate(node: BSTNode):
-            if node.left:
-                iterate(node.left)
-        # if node.weight:
-            weights.append(node.balance)
-            if node.right:
-                iterate(node.right)
-
-        iterate(self)
-        return weights
 
     @property
     def min(self) -> int:
