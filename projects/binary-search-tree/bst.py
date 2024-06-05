@@ -10,32 +10,46 @@ class BSTNode():
 
     @property
     def balance(self):
-        r = 0 if self.right == None else self.right.height
-        l = 0 if self.left == None else self.left.height
+        r = 0 if self.right == None else 1 + self.right.height
+        l = 0 if self.left == None else 1 + self.left.height
         return r - l
+
+    def recalculate_height(self) -> int:
+        if self.left and self.right:
+            return 1 + max(self.left.height, self.right.height)
+        if self.right:
+            return 1 + self.right.height
+        if self.left:
+            return 1 + self.left.height
+        return 0
 
     def insert(self, val) -> None:
         '''Inserts a node into the BST.'''
         if not self.value:
             self.value = val
         elif val >= self.value:
-            # TODO: rework to adjust height rather than balance
-            self.balance += 1
             if self.right:
                 self.right.insert(val)
+                self.height = self.right.height + 1  # extend height
             else:
                 self.right = BSTNode(val)
+                if not self.left:  # extend height when inserting
+                    self.height += 1
         elif val < self.value:
-            # TODO: rework to adjust height rather than balance
-            self.balance -= 1
             if self.left:
                 self.left.insert(val)
+                self.height = self.right.height + 1  # extend height
             else:
                 self.left = BSTNode(val)
+                if not self.right:  # extend height when inserting
+                    self.height += 1
         else:
             raise Exception
 
+        # TODO: rework to adjust height rather than balance
+
         # TODO: Rebalance tree after insertion.
+        print(self.balance)
         if self.balance > 1:
             if val < self.right.value:
                 self.right._rotate_right()
@@ -88,24 +102,25 @@ class BSTNode():
         # TODO: rebalance after delete
 
     def _rotate_right(self) -> None:
-        x = self
-        x.left = self.left.right
-        self = self.left
-        self.right = x
-        self.balance += 2  # TODO: recalculate weights after rotation.
-
-    def _rotate_left_right(self) -> None:
-        pass
+        self.right = self
+        self.right.left = self.left.right
+        self.value = self.left.value
+        self.height = self.left.height
+        self.left = self.left.left
+        # recalculate heights
+        self.right.height = self.right.recalculate_height()
+        self.height = self.recalculate_height()
 
     def _rotate_left(self) -> None:
-        x = self
-        x.right = self.right.left
-        self = self.right
-        self.left = x
-        self.balance -= 2  # TODO: recalculate weights after rotation.
-
-    def _rotate_right_left(self) -> None:
-        pass
+        # ROTATE FUNCTIONS ARE NOT CHANGING THE DATA CORRECTLY. THE ISSUE IS IN REFERENCING SELF?
+        self.left = self
+        self.left.right = self.right.left
+        self.value = self.right.value
+        self.height = self.right.height
+        self.right = self.right.right
+        # recalculate heights
+        self.left.height = self.left.recalculate_height()
+        self.height = self.recalculate_height()
 
     @property
     def values(self) -> list[int]:
