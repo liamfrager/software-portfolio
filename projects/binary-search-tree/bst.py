@@ -11,6 +11,61 @@ class BSTNode():
         # WEIGHTS
         self.height = 0
 
+    def __repr__(self) -> str:
+        layers = self.height if self.height < 4 else 3
+        bracket_lead_indent = 2
+        num_lead_indent = 0
+        num_gap = 1
+        for _ in range(layers):
+            bracket_lead_indent = bracket_lead_indent * 2 + 1
+            num_lead_indent = num_lead_indent * 2 + 2
+            num_gap = num_gap * 2 + 3
+
+        tree = f'\n{' ' * num_lead_indent}{f'00{self.value}'[-3:]}'
+        for layer in range(layers):
+            # add bracket layer
+            tree += '\n'
+            bracket_lead_indent = int((bracket_lead_indent - 1) / 2)
+            bracket_width = (2 ** (layers - layer)) - 1
+            bracket_gap = num_gap - ((layers - 1 - layer) * 2)
+            tree += ' ' * bracket_lead_indent
+            for i in range(2 ** layer):
+                tree += '/' if self.left else ' '
+                tree += ' ' * bracket_width
+                tree += '\\' if self.right else ' '
+                tree += ' ' * bracket_gap
+
+            # add number layer
+            tree += '\n'
+            num_gap = int((num_gap - 3) / 2)
+            num_lead_indent = int((num_lead_indent - 2) / 2)
+            tree += ' ' * num_lead_indent
+            for i in range(2 ** layer):
+                tree += f'00{self.left.value}'[-3:] if self.left else '   '
+                tree += ' ' * num_gap
+                tree += f'00{self.right.value}'[-3:] if self.right else '   '
+                tree += ' ' * num_gap
+        tree += '\n'
+
+        return tree
+
+        def iterate(node: BSTNode) -> str:
+            if node.value:
+                return node.__repr__()
+            if node.left:
+                iterate(node.left)
+            if node.right:
+                iterate(node.right)
+        tree = '''
+                              014
+                           /       \
+                      012             013
+                     /   \           /   \
+                  008     009     010     011
+                  / \     / \     / \     / \
+                000 001 002 003 004 005 006 007
+            '''
+
     @property
     def balance(self):
         r = 0 if self.right == None else 1 + self.right.height
