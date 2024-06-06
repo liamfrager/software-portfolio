@@ -11,7 +11,7 @@ print(tree)
 
 print(tree.values)
 
-print(tree.find(7))
-print(tree.find(8))
+# print(tree.find(7))
+# print(tree.find(8))
 
-print(tree)
+# print(tree)
