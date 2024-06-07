@@ -105,7 +105,7 @@ class AVLNode():
             self.value = value
         elif value >= self.value:
             if self.right:
-                self.right.insert(value)
+                self.right = self.right.insert(value)
                 self.height = self.right.height + 1  # extend height
             else:
                 self.right = AVLNode(value)
@@ -113,7 +113,7 @@ class AVLNode():
                     self.height += 1
         elif value < self.value:
             if self.left:
-                self.left.insert(value)
+                self.left = self.left.insert(value)
                 self.height = self.right.height + 1  # extend height
             else:
                 self.left = AVLNode(value)
@@ -125,14 +125,17 @@ class AVLNode():
         # rebalance tree after insertion.
         if self.balance > 1:
             if value < self.right.value:
+                # TODO: figure out why LR and RL rotations are not triggering.
+                print('left before right')
                 self.right = self.right._rotate_right()
             self = self._rotate_left()
         if self.balance < -1:
             if value > self.left.value:
+                # TODO: figure out why LR and RL rotations are not triggering.
+                print('right before left')
                 self.left = self.left._rotate_left()
             self = self._rotate_right()
-        # TODO: This 'self' is not the same as the result of the _rotate functions. an issue of the line self = self._rotate?
-        print('node', self)
+        # print('node', self)
         return self
 
     def find(self, value) -> bool:
@@ -210,7 +213,7 @@ class AVLTree():
             self.root = AVLNode(value)
         else:
             x = self.root.insert(value)
-            print('tree', x)
+            # print('tree', x)
             self.root = x
 
     @property
