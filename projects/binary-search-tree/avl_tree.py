@@ -71,18 +71,26 @@ class AVLNode():
                         new_nodes.append(None)
                 nodes = new_nodes
 
+            if self.height > 3:
+                tree += '\n'
+                for node in nodes:
+                    if node:
+                        tree += '/ ' if node.left else '  '
+                        tree += '\ ' if node.right else '  '
+                    else:
+                        tree += '    '
+
             tree += '\n'
 
             return tree
-            '''
-                              014
-                           /       \
-                      012             013
-                     /   \           /   \
-                  008     009     010     011
-                  / \     / \     / \     / \
-                000 001 002 003 004 005 006 007
-            '''
+        #                   014
+        #                /       \
+        #           012             013
+        #          /   \           /   \
+        #       008     009     010     011
+        #       / \     / \     / \     / \
+        #     000 001 002 003 004 005 006 007
+        #     / \ / \ / \ / \ / \ / \ / \ / \
 
     @property
     def balance(self):
@@ -106,7 +114,7 @@ class AVLNode():
         elif value >= self.value:
             if self.right:
                 self.right = self.right.insert(value)
-                self.height = self.right.height + 1  # extend height
+                self.height = self.recalculate_height()  # extend height
             else:
                 self.right = AVLNode(value)
                 if not self.left:  # extend height
@@ -114,7 +122,7 @@ class AVLNode():
         elif value < self.value:
             if self.left:
                 self.left = self.left.insert(value)
-                self.height = self.right.height + 1  # extend height
+                self.height = self.recalculate_height()  # extend height
             else:
                 self.left = AVLNode(value)
                 if not self.right:  # extend height
@@ -126,16 +134,13 @@ class AVLNode():
         if self.balance > 1:
             if value < self.right.value:
                 # TODO: figure out why LR and RL rotations are not triggering.
-                print('left before right')
                 self.right = self.right._rotate_right()
             self = self._rotate_left()
         if self.balance < -1:
             if value > self.left.value:
                 # TODO: figure out why LR and RL rotations are not triggering.
-                print('right before left')
                 self.left = self.left._rotate_left()
             self = self._rotate_right()
-        # print('node', self)
         return self
 
     def find(self, value) -> bool:
@@ -213,7 +218,6 @@ class AVLTree():
             self.root = AVLNode(value)
         else:
             x = self.root.insert(value)
-            # print('tree', x)
             self.root = x
 
     @property
