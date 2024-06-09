@@ -108,7 +108,7 @@ class AVLNode():
         return 0
 
     def insert(self, value):
-        '''Inserts a node into the BST.'''
+        '''Inserts an ancestor node with a given value.'''
         if not self.value:
             self.value = value
         elif value >= self.value:
@@ -133,12 +133,10 @@ class AVLNode():
         # rebalance tree after insertion.
         if self.balance > 1:
             if value < self.right.value:
-                # TODO: figure out why LR and RL rotations are not triggering.
                 self.right = self.right._rotate_right()
             self = self._rotate_left()
         if self.balance < -1:
             if value > self.left.value:
-                # TODO: figure out why LR and RL rotations are not triggering.
                 self.left = self.left._rotate_left()
             self = self._rotate_right()
         return self
@@ -155,13 +153,13 @@ class AVLNode():
             return False
 
     def delete(self, value) -> None:
-        '''Removes a node from the BST.'''
+        '''Removes an ancester node with a given value.'''
         if self.value == value:
-            if self.left == None:
+            if self.left == None and self.right:
                 self.value = self.right.value
                 self.left = self.right.left
                 self.right = self.right.right
-            elif self.right == None:
+            elif self.right == None and self.left:
                 self.value = self.left.value
                 self.right = self.left.right
                 self.left = self.left.left
@@ -214,11 +212,18 @@ class AVLTree():
         return self.root.__repr__()
 
     def insert(self, value):
+        '''Inserts a node with the given value into the AVL tree.'''
         if self.root == None:
             self.root = AVLNode(value)
         else:
-            x = self.root.insert(value)
-            self.root = x
+            self.root = self.root.insert(value)
+
+    def delete(self, value):
+        '''Deletes a node with the given value from the AVL tree.'''
+        if self.root == None:
+            self.root = AVLNode(value)
+        else:
+            self.root = self.root.delete(value)
 
     @property
     def values(self) -> list[int]:
