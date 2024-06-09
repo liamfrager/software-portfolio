@@ -2,14 +2,14 @@ import copy
 
 
 class AVLNode():
-    def __init__(self, value=None) -> None:
+    def __init__(self, value: 'None | int | AVLNode' = None) -> None:
         # VALUE
-        self.value = value
+        self.value = value.value if type(value) == AVLNode else value
         # RELATIONSHIPS
-        self.left: AVLNode = None
-        self.right: AVLNode = None
+        self.left: AVLNode = value.left if type(value) == AVLNode else None
+        self.right: AVLNode = value.right if type(value) == AVLNode else None
         # WEIGHTS
-        self.height = 0
+        self.height = value.height if type(value) == AVLNode else 0
 
     def __repr__(self) -> str:
         if not self:
@@ -107,11 +107,16 @@ class AVLNode():
             return 1 + self.left.height
         return 0
 
-    def insert(self, value):
+    def insert(self, value: 'int | AVLNode'):
         '''Inserts an ancestor node with a given value.'''
+        if type(value) == AVLNode:
+            val = value.value
+        else:
+            val = value
+
         if not self.value:
-            self.value = value
-        elif value >= self.value:
+            self.value = val
+        elif val >= self.value:
             if self.right:
                 self.right = self.right.insert(value)
                 self.height = self.recalculate_height()  # extend height
@@ -119,7 +124,7 @@ class AVLNode():
                 self.right = AVLNode(value)
                 if not self.left:  # extend height
                     self.height += 1
-        elif value < self.value:
+        elif val < self.value:
             if self.left:
                 self.left = self.left.insert(value)
                 self.height = self.recalculate_height()  # extend height
@@ -132,11 +137,11 @@ class AVLNode():
 
         # rebalance tree after insertion.
         if self.balance > 1:
-            if value < self.right.value:
+            if val < self.right.value:
                 self.right = self.right._rotate_right()
             self = self._rotate_left()
         if self.balance < -1:
-            if value > self.left.value:
+            if val > self.left.value:
                 self.left = self.left._rotate_left()
             self = self._rotate_right()
         return self
@@ -155,25 +160,20 @@ class AVLNode():
     def delete(self, value) -> None:
         '''Removes an ancester node with a given value.'''
         if self.value == value:
-            if self.left == None and self.right:
+            if not self.left and self.right:
                 self.value = self.right.value
                 self.left = self.right.left
                 self.right = self.right.right
-            elif self.right == None and self.left:
+            elif not self.right and self.left:
                 self.value = self.left.value
                 self.right = self.left.right
                 self.left = self.left.left
+            elif self.left and self.right:
+                # Insert right node after the right node.
+                self = self.left.insert(self.right)
             else:
-                # Place the right subtree of the deleted node at largest end of left subtree of the deleted node
-                largest_on_left = self.left
-                while largest_on_left.right:
-                    largest_on_left = largest_on_left.right
-                largest_on_left.right = self.right
-                # Reassign values
-                self.value = self.left.value
-                self.right = self.left.right
-                self.left = self.left.left
-
+                # does not need to rebalance when deleting leaf node.
+                return None
         elif value >= self.value and self.right:
             self.right.delete(value)
         elif value < self.value and self.left:
@@ -182,6 +182,16 @@ class AVLNode():
             raise Exception
 
         # TODO: rebalance after delete
+        # rebalance tree after deletion.
+        if self.balance > 1:
+            if value < self.right.value:
+                self.right = self.right._rotate_right()
+            self = self._rotate_left()
+        if self.balance < -1:
+            if value > self.left.value:
+                self.left = self.left._rotate_left()
+            self = self._rotate_right()
+        return self
 
     def _rotate_right(self) -> None:
         x = copy.deepcopy(self)
@@ -206,7 +216,7 @@ class AVLNode():
 
 class AVLTree():
     def __init__(self):
-        self.root: AVLNode = None
+        self.root: AVLNode | None = None
 
     def __repr__(self):
         return self.root.__repr__()
