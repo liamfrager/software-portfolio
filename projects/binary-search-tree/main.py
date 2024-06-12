@@ -8,11 +8,10 @@ tree = AVLTree()
 
 nums = [5, 3, 6, 7, 4, 10, 11, 8, 9, 12, 1, 2]
 for num in nums:
-    tree.insert(num)
-print(tree)
+    print(num, tree.insert(num))
 tree.delete(8)
 print(tree)
-tree.delete(4)
-print(tree)
-print(tree.root.value)
+if tree.delete(4):
+    print(tree)
+# print(tree.find(10))
 # print(tree.values)

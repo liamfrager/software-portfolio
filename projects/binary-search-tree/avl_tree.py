@@ -98,8 +98,8 @@ class AVLNode():
         l = 0 if self.left == None else 1 + self.left.height
         return r - l
 
-    def insert(self, value: 'int | AVLNode'):
-        '''Inserts an ancestor node with a given value.'''
+    def insert(self, value: 'int | AVLNode') -> 'AVLNode':
+        '''Inserts an ancestor node with a given value. Returns True if the node was successfully inserted, otherwise False'''
         if type(value) == AVLNode:
             val = value.value
         else:
@@ -107,7 +107,7 @@ class AVLNode():
 
         if not self.value:
             self.value = val
-        elif val >= self.value:
+        elif val > self.value:
             if self.right:
                 self.right = self.right.insert(value)
                 self.height = self._recalculate_height()  # extend height
@@ -137,7 +137,7 @@ class AVLNode():
             self = self._rotate_right()
         return self
 
-    def delete(self, value):
+    def delete(self, value: int) -> 'AVLNode | None':
         '''Removes an ancester node with a given value.'''
         if self.value == value:
             if not self.left and self.right:
@@ -154,7 +154,7 @@ class AVLNode():
             else:
                 # does not need to rebalance when deleting leaf node.
                 return None
-        elif value >= self.value and self.right:
+        elif value > self.value and self.right:
             self.right = self.right.delete(value)
             self.height = self._recalculate_height()
         elif value < self.value and self.left:
@@ -174,16 +174,27 @@ class AVLNode():
             self = self._rotate_right()
         return self
 
-    def exists(self, value) -> bool:
-        '''Returns TRUE if value is in the tree'''
+    def exists(self, value: int) -> bool:
+        '''Take an integer as an input and returns True if the node or any of its ancestors equals the given value, otherwise False.'''
         if self.value == value:
             return True
         elif value < self.value and self.left:
             return self.left.find(value)
-        elif value >= self.value and self.right:
+        elif value > self.value and self.right:
             return self.right.find(value)
         else:
             return False
+
+    def find(self, value: int) -> 'AVLNode':
+        '''Takes an integer as an input and returns the node with that value. Returns None if the value is not in the tree.'''
+        if value == self.value:
+            return self
+        elif value < self.value and self.left:
+            return self.left.find(value)
+        elif value > self.value and self.right:
+            return self.right.find(value)
+        else:
+            return None
 
     def _recalculate_height(self) -> int:
         if self.left and self.right:
@@ -194,7 +205,7 @@ class AVLNode():
             return 1 + self.left.height
         return 0
 
-    def _rotate_right(self) -> None:
+    def _rotate_right(self) -> 'AVLNode':
         x = copy.deepcopy(self)
         x.left = copy.deepcopy(self.left.right)
         self = copy.deepcopy(self.left)
@@ -204,7 +215,7 @@ class AVLNode():
         self.height = self._recalculate_height()
         return self
 
-    def _rotate_left(self) -> None:
+    def _rotate_left(self) -> 'AVLNode':
         x = copy.deepcopy(self)
         x.right = copy.deepcopy(self.right.left)
         self = copy.deepcopy(self.right)
@@ -219,26 +230,48 @@ class AVLTree():
     def __init__(self):
         self.root: AVLNode | None = None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.root.__repr__()
 
-    def insert(self, value):
-        '''Inserts a node with the given value into the AVL tree.'''
-        if self.root == None:
-            self.root = AVLNode(value)
+    def insert(self, value: int | AVLNode) -> bool:
+        '''Inserts a node with the given value into the AVL tree. Returns True if the value is successfully inserted, otherwise False.'''
+        if self.root:
+            try:
+                self.root = self.root.insert(value)
+                return True
+            except:
+                # Value already in tree
+                return False
         else:
-            self.root = self.root.insert(value)
+            self.root = AVLNode(value)
+            return True
 
-    def delete(self, value):
-        '''Deletes a node with the given value from the AVL tree.'''
-        if self.root == None:
-            self.root = AVLNode(value)
-        else:
-            self.root = self.root.delete(value)
+    def delete(self, value: int) -> bool:
+        '''Deletes a node with the given value from the AVL tree. Returns True if the value is successfully deleted, otherwise False.'''
+        if self.root:
+            try:
+                self.root = self.root.delete(value)
+                return True
+            except:
+                # Value not in the tree.
+                return False
+        return False
+
+    def exists(self, value: int) -> bool:
+        '''Takes an integer as an input and returns True if value is in the tree, otherwise, False.'''
+        if self.root:
+            return self.root.exists(value)
+        return False
+
+    def find(self, value: int) -> AVLNode | None:
+        '''Takes an integer as an input and returns the node in the tree with that value. Returns None if the value is not in the tree.'''
+        if self.root:
+            return self.root.find(value)
+        return None
 
     @property
     def values(self) -> list[int]:
-        '''Prints all values of the BST in order.'''
+        '''Prints all values of the BST in numerical order.'''
         vals = []
 
         def iterate(node: AVLNode):
