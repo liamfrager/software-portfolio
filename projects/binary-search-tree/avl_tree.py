@@ -157,7 +157,7 @@ class AVLNode():
         else:
             return False
 
-    def delete(self, value) -> None:
+    def delete(self, value):
         '''Removes an ancester node with a given value.'''
         if self.value == value:
             if not self.left and self.right:
@@ -175,20 +175,21 @@ class AVLNode():
                 # does not need to rebalance when deleting leaf node.
                 return None
         elif value >= self.value and self.right:
-            self.right.delete(value)
+            self.right = self.right.delete(value)
+            self.height = self.recalculate_height()
         elif value < self.value and self.left:
-            self.left.delete(value)
+            self.left = self.left.delete(value)
+            self.height = self.recalculate_height()
         else:
             raise Exception
 
-        # TODO: rebalance after delete
         # rebalance tree after deletion.
         if self.balance > 1:
-            if value < self.right.value:
+            if self.right and self.right.balance < 0:
                 self.right = self.right._rotate_right()
             self = self._rotate_left()
         if self.balance < -1:
-            if value > self.left.value:
+            if self.left and self.left.balance > 0:
                 self.left = self.left._rotate_left()
             self = self._rotate_right()
         return self
