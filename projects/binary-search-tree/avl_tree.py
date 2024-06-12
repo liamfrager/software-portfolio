@@ -98,15 +98,6 @@ class AVLNode():
         l = 0 if self.left == None else 1 + self.left.height
         return r - l
 
-    def recalculate_height(self) -> int:
-        if self.left and self.right:
-            return 1 + max(self.left.height, self.right.height)
-        if self.right:
-            return 1 + self.right.height
-        if self.left:
-            return 1 + self.left.height
-        return 0
-
     def insert(self, value: 'int | AVLNode'):
         '''Inserts an ancestor node with a given value.'''
         if type(value) == AVLNode:
@@ -119,7 +110,7 @@ class AVLNode():
         elif val >= self.value:
             if self.right:
                 self.right = self.right.insert(value)
-                self.height = self.recalculate_height()  # extend height
+                self.height = self._recalculate_height()  # extend height
             else:
                 self.right = AVLNode(value)
                 if not self.left:  # extend height
@@ -127,7 +118,7 @@ class AVLNode():
         elif val < self.value:
             if self.left:
                 self.left = self.left.insert(value)
-                self.height = self.recalculate_height()  # extend height
+                self.height = self._recalculate_height()  # extend height
             else:
                 self.left = AVLNode(value)
                 if not self.right:  # extend height
@@ -145,17 +136,6 @@ class AVLNode():
                 self.left = self.left._rotate_left()
             self = self._rotate_right()
         return self
-
-    def find(self, value) -> bool:
-        '''Returns TRUE if value is in the tree'''
-        if self.value == value:
-            return True
-        elif value < self.value and self.left:
-            return self.left.find(value)
-        elif value >= self.value and self.right:
-            return self.right.find(value)
-        else:
-            return False
 
     def delete(self, value):
         '''Removes an ancester node with a given value.'''
@@ -176,10 +156,10 @@ class AVLNode():
                 return None
         elif value >= self.value and self.right:
             self.right = self.right.delete(value)
-            self.height = self.recalculate_height()
+            self.height = self._recalculate_height()
         elif value < self.value and self.left:
             self.left = self.left.delete(value)
-            self.height = self.recalculate_height()
+            self.height = self._recalculate_height()
         else:
             raise Exception
 
@@ -194,14 +174,34 @@ class AVLNode():
             self = self._rotate_right()
         return self
 
+    def exists(self, value) -> bool:
+        '''Returns TRUE if value is in the tree'''
+        if self.value == value:
+            return True
+        elif value < self.value and self.left:
+            return self.left.find(value)
+        elif value >= self.value and self.right:
+            return self.right.find(value)
+        else:
+            return False
+
+    def _recalculate_height(self) -> int:
+        if self.left and self.right:
+            return 1 + max(self.left.height, self.right.height)
+        if self.right:
+            return 1 + self.right.height
+        if self.left:
+            return 1 + self.left.height
+        return 0
+
     def _rotate_right(self) -> None:
         x = copy.deepcopy(self)
         x.left = copy.deepcopy(self.left.right)
         self = copy.deepcopy(self.left)
         self.right = x
         # recalculate heights
-        self.right.height = self.right.recalculate_height()
-        self.height = self.recalculate_height()
+        self.right.height = self.right._recalculate_height()
+        self.height = self._recalculate_height()
         return self
 
     def _rotate_left(self) -> None:
@@ -210,8 +210,8 @@ class AVLNode():
         self = copy.deepcopy(self.right)
         self.left = x
         # recalculate heights
-        self.left.height = self.left.recalculate_height()
-        self.height = self.recalculate_height()
+        self.left.height = self.left._recalculate_height()
+        self.height = self._recalculate_height()
         return self
 
 
