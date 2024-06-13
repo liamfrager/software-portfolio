@@ -110,19 +110,17 @@ class AVLNode():
         elif val > self.value:
             if self.right:
                 self.right = self.right.insert(value)
-                self.height = self._recalculate_height()  # extend height
+                self.height = self._calculate_height()
             else:
                 self.right = AVLNode(value)
-                if not self.left:  # extend height
-                    self.height += 1
+                self.height = self._calculate_height()
         elif val < self.value:
             if self.left:
                 self.left = self.left.insert(value)
-                self.height = self._recalculate_height()  # extend height
+                self.height = self._calculate_height()
             else:
                 self.left = AVLNode(value)
-                if not self.right:  # extend height
-                    self.height += 1
+                self.height = self._calculate_height()
         else:
             raise Exception
 
@@ -140,27 +138,28 @@ class AVLNode():
     def delete(self, value: int) -> 'AVLNode | None':
         '''Removes an ancester node with a given value.'''
         if self.value == value:
-            if not self.left and self.right:
+            if (not self.left) and self.right:
                 self.value = self.right.value
                 self.left = self.right.left
                 self.right = self.right.right
-            elif not self.right and self.left:
+            elif (not self.right) and self.left:
                 self.value = self.left.value
                 self.right = self.left.right
                 self.left = self.left.left
             elif self.left and self.right:
-                # Insert right node after the right node.
+                # insert right node after left node.
                 self = self.left.insert(self.right)
             else:
-                # does not need to rebalance when deleting leaf node.
+                # does not need to rebalance leaf node.
                 return None
         elif value > self.value and self.right:
             self.right = self.right.delete(value)
-            self.height = self._recalculate_height()
+            self.height = self._calculate_height()
         elif value < self.value and self.left:
             self.left = self.left.delete(value)
-            self.height = self._recalculate_height()
+            self.height = self._calculate_height()
         else:
+            # not a valid input
             raise Exception
 
         # rebalance tree after deletion.
@@ -196,7 +195,7 @@ class AVLNode():
         else:
             return None
 
-    def _recalculate_height(self) -> int:
+    def _calculate_height(self) -> int:
         if self.left and self.right:
             return 1 + max(self.left.height, self.right.height)
         if self.right:
@@ -211,8 +210,8 @@ class AVLNode():
         self = copy.deepcopy(self.left)
         self.right = x
         # recalculate heights
-        self.right.height = self.right._recalculate_height()
-        self.height = self._recalculate_height()
+        self.right.height = self.right._calculate_height()
+        self.height = self._calculate_height()
         return self
 
     def _rotate_left(self) -> 'AVLNode':
@@ -221,8 +220,8 @@ class AVLNode():
         self = copy.deepcopy(self.right)
         self.left = x
         # recalculate heights
-        self.left.height = self.left._recalculate_height()
-        self.height = self._recalculate_height()
+        self.left.height = self.left._calculate_height()
+        self.height = self._calculate_height()
         return self
 
 
