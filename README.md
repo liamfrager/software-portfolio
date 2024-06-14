@@ -5,6 +5,7 @@
 - [To-Do List](#to-do-list)
 - [Space Invaders](#space-invaders)
 - [Bookshelf](#bookshelf)
+- [AVL Tree](#avl-tree)
 
 ---
 
@@ -111,3 +112,28 @@ The user can add a book by searching with an ISBN number.
 The web app is responsive and can be used on both desktop and mobile.
 
 ![alt text](./images/bookshelf/mobile.png)
+
+---
+
+## AVL Tree
+An python implementation of an Adelson-Velsky-Landis binary search tree (AVL tree).
+
+### Tree visualization
+Includes a custom __repr__ method that prints a visual representation of a node and up to three generations of its decendents.
+
+![alt text](./images/avl-tree/full_tree.png)
+
+### Functionality
+Includes the following methods:
+- insert: add a node to the tree.
+- delete: remove a node from the tree.
+- exists: returns a bool indicating whether a node with the given value exists in the tree.
+- find: returns a node in the tree with the given value if there is one.
+Includes the following properties:
+- max: returns the node with the largest value.
+- min: returns the node with the smallest value.
+- values: returns all the values in the tree as a numerically sorted list.
+
+### Known limitations
+- __repr__ method only works with values between 0 and 999 inclusive.
+- Tree will not create a node with a value that is already in the tree (but one can insert a node whose child has a value that is already in the tree.)
