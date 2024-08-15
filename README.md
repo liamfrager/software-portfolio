@@ -2,6 +2,8 @@
 
 ## Projects
 
+- [Christmas App](https://christmas-list-app-2ffd9.web.app)
+- [Online Merch Shop](https://shop.lakeshorelabradoodles.com)
 - [To-Do List](#to-do-list)
 - [Space Invaders](#space-invaders)
 - [Bookshelf](#bookshelf)
